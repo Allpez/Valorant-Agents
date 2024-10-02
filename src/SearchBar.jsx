@@ -14,5 +14,4 @@ function SearchBar({ searchText, handleChangeText }) {
     );
 }
 
-
 export { SearchBar };

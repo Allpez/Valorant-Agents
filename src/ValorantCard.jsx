@@ -6,7 +6,6 @@ function ContainerCards({ text, agentes, addFavorite, removeFavorite, favorites 
     
     const agentesFiltrados = agentes.filter((a) => {
         const nombre = a.displayName.toUpperCase();
-
         if (a.fullPortraitV2 && !agentesUnicos[nombre]) {
             agentesUnicos[nombre] = true;
             return true;
@@ -22,12 +21,12 @@ function ContainerCards({ text, agentes, addFavorite, removeFavorite, favorites 
         <div className="flex flex-wrap gap-6 justify-center m-8">
             {agentesFinales.map((o) => (
                 <ValorantCard
-                key={o.id}
-                agent={o}
-                addFavorite={addFavorite}
-                removeFavorite={removeFavorite}
-                isInitiallyFavorite={favorites.some(fav => fav.id === o.id)} // Verifica esto
-            />
+                    key={o.uuid}
+                    agent={o}
+                    addFavorite={addFavorite}
+                    removeFavorite={removeFavorite}
+                    isInitiallyFavorite={favorites.some(fav => fav.uuid === o.uuid)}
+                />
             ))}
         </div>
     );
@@ -38,13 +37,14 @@ function ValorantCard({ agent, addFavorite, removeFavorite, isInitiallyFavorite 
 
     const handleClickFavorites = () => {
         if (isFavorite) {
-            removeFavorite(agent.id);
+            removeFavorite(agent.uuid);
         } else {
             addFavorite(agent);
         }
         setIsFavorite(!isFavorite);
     };
 
+    
     return (
         <div className="relative group w-96 flex flex-col justify-between">
             <div className="relative gradient w-full h-5/6 rounded-t-full">
@@ -55,14 +55,17 @@ function ValorantCard({ agent, addFavorite, removeFavorite, isInitiallyFavorite 
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-4 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
-                        className="bg-red-950 text-yellow-400 px-4 py-2 rounded-3xl font-bold w-40"
                         onClick={handleClickFavorites}
+                        className={`px-4 py-2 rounded-3xl font-bold w-40 transition-colors duration-300 ${
+                            isFavorite
+                                ? 'bg-yellow-400 text-red-950'
+                                : 'bg-red-950 text-yellow-400'
+                        }`}
                     >
                         {isFavorite ? "Remove Favorite" : "Add Favorite"}
                     </button>
                 </div>
             </div>
-
             <div className="h-1/6 relative border-solid border-2 border-slate-300 bg-slate-200 pt-2 pb-6 pl-3 rounded-b-full">
                 <h2 className="font-bold text-center text-red-500 text-2xl">{agent.displayName.toUpperCase()}</h2>
                 <h3 className="font-bold text-center">{agent.role.displayName}</h3>
